@@ -1,3 +1,26 @@
+
+<?php 
+include('../database/conn.php');
+/* Displays user information and some useful messages */
+session_start();
+
+// Check if user is logged in using the session variable
+if ( $_SESSION['loggedin'] != 1 ) {
+  $_SESSION['message'] = "You must log in before viewing your profile page!";
+  header("location: error.php");    
+}
+else
+{ 
+$username=$_SESSION['username'];
+$type=$_SESSION['type'];
+$email=$_SESSION['email'];
+$id=$_SESSION['id'];
+if($type !== "admin"){
+    header( "location: ../admin/index.php" );
+}
+}
+?>
+
 <!doctype html>
 <html lang="en-us">
     
@@ -57,7 +80,7 @@
             
             <div class="c-dropdown u-ml-auto dropdown">
                 <a  class="c-avatar c-avatar--xsmall has-dropdown dropdown-toggle" href="#" id="dropdwonMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="c-avatar__img" src="img/avatar-72.jpg" alt="User's Profile Picture">
+                <p class="text"><?php echo $username ?></p>
                 </a>
 
                 <div class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdwonMenuAvatar">

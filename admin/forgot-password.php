@@ -1,3 +1,58 @@
+<?php 
+/* Reset your password form, sends reset.php password link */
+include "../database/conn.php";
+session_start();
+
+// Check if form submitted with method="post"
+if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) 
+{   
+    $email = $conn->escape_string($_POST['email']);
+    $result = $conn->query("SELECT * FROM users WHERE email='$email'");
+
+    if ( $result->num_rows == 0 ) // User doesn't exist
+    { 
+        ?>
+<script>
+alert("User with that email doesn't exist!")
+</script>
+        <?php
+    }
+    else { // User exists (num_rows != 0)
+
+        $user = $result->fetch_assoc(); // $user becomes array with user data
+        
+        $email = $user['email'];
+        $someArray = array("email"=>$email, "secret"=>"thequicktimes020", "sol"=>"blaise");
+        $hash = md5(serialize($someArray));
+        $username = $user['username'];
+
+        // Session message to display on success.php
+        $_SESSION['message'] = "<p>Please check your email <span>$email</span>"
+        . " for a confirmation link to complete your password reset!</p>";
+
+        // Send registration confirmation link (reset.php)
+        $to      = $email;
+        $subject = 'Password Reset Link ( thequicktimes.com )';
+        $message_body = '
+        Hello '.$username.',
+
+        You have requested password reset!
+
+        Please click this link to reset your password:
+
+        http://localhost:8080/thequicktimes/admin/reset.php?hash='.$hash;  
+
+        mail($to, $subject, $message_body);
+
+        ?>
+<script>
+alert("Please check your email for a confirmation link to complete your password reset")
+</script>
+        <?php
+  }
+}
+?>
+
 <!doctype html>
 <html lang="en-us">
     
@@ -23,12 +78,15 @@
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-
+        <br>
+        <br>
+        <br>
+        <br>
         <div class="o-page__card">
             <div class="c-card u-mb-xsmall">
                 <header class="c-card__header u-text-center u-pt-large">
                     <a class="c-card__icon" href="#!">
-                        <img src="img/logo-login.svg" alt="Dashboard's Logo">
+                        <h1 style="color: white; font-size:1em;">TQT</h1>
                     </a>
                     <div class="row u-justify-center">
                         <div class="col-9">
@@ -40,18 +98,18 @@
                     </div>
                 </header>
                 
-                <form class="c-card__body">
+                <form class="c-card__body"  method="post"  action="forgot-password.php">
                     <div class="c-field u-mb-small">
                         <label class="c-field__label" for="input1">Email Address:</label>
-                        <input class="c-input" type="email" id="input1" placeholder="clark@dashboard.com"> 
+                        <input class="c-input" type="email" id="input1" name="email" placeholder="thequicktimes@dashboard.com" required> 
                     </div>
 
                     <button class="c-btn c-btn--info c-btn--fullwidth" type="submit">Send Password Reset Instructions</button>
                 </form>
             </div>
 
-            <a class="u-text-mute u-text-small" href="register.html">
-                Don’t have an account yet? Get Started
+            <a class="u-text-mute u-text-small" href="index.php">
+                Sign In page?
             </a>
         </div>
 

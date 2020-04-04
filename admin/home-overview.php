@@ -1,3 +1,26 @@
+
+<?php 
+include('../database/conn.php');
+/* Displays user information and some useful messages */
+session_start();
+
+// Check if user is logged in using the session variable
+if ( $_SESSION['loggedin'] != 1 ) {
+  $_SESSION['message'] = "You must log in before viewing your profile page!";
+  header("location: error.php");    
+}
+else
+{ 
+$username=$_SESSION['username'];
+$type=$_SESSION['type'];
+$email=$_SESSION['email'];
+$id=$_SESSION['id'];
+if($type !== "admin"){
+    header( "location: ../admin/index.php" );
+}
+}
+?>
+
 <!doctype html>
 <html lang="en-us">
     
@@ -18,6 +41,7 @@
 
         <!-- Stylesheet -->
         <link rel="stylesheet" href="css/main.min3661.css">
+        <link rel="stylesheet" href="css/mine.css">
     </head>
     <body class="o-page">
         <!--[if lte IE 9]>
@@ -27,224 +51,42 @@
         <div class="o-page__sidebar js-page-sidebar">
             <div class="c-sidebar">
                 <a class="c-sidebar__brand" href="#">
-                    <img class="c-sidebar__brand-img" src="img/logo.png" alt="Logo"> Dashboard
+                    <img class="c-sidebar__brand-img" src="img/logo.png" alt="Logo"> The Quick Times
                 </a>
                 
                 <h4 class="c-sidebar__title">Dashboards</h4>
                 <ul class="c-sidebar__list">
 
                     <li class="c-sidebar__item">
-                        <a class="c-sidebar__link is-active" href="home-overview.html">
+                        <a class="c-sidebar__link is-active" href="home-overview.php">
                             <i class="fa fa-home u-mr-xsmall"></i>Overview
                         </a>
                     </li>
-
                     <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="performance.html">
-                            <i class="fa fa-tachometer u-mr-xsmall"></i>Performance <span class="c-badge c-badge--success c-badge--xsmall u-ml-xsmall">New</span>
+                        <a class="c-sidebar__link "   target="_blank" href="categories.php">
+                            <i class="fa fa-tag u-mr-xsmall"></i>Categories
                         </a>
                     </li>
 
                     <li class="c-sidebar__item">
                         <a class="c-sidebar__link" href="analytics.html">
-                            <i class="fa fa-line-chart u-mr-xsmall"></i>Analytics
+                            <i class="fa fa-newspaper-o u-mr-xsmall"></i>Stories
                         </a>
                     </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="index.html">
-                            <i class="fa fa-rocket u-mr-xsmall"></i>Landing
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="projects.html">
-                            <i class="fa fa-table u-mr-xsmall"></i>Projects
-                        </a>
-                    </li>
-                </ul>
-
-                <h4 class="c-sidebar__title">Apps</h4>
-                <ul class="c-sidebar__list">
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="boards.html">
-                            <i class="fa fa-hand-paper-o u-mr-xsmall"></i>Boards (CRM)
-                        </a>
-                    </li>
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="calendar.html">
-                            <i class="fa fa-calendar u-mr-xsmall"></i>Calendar
-                        </a>
-                    </li>
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="news-feed.html">
-                            <i class="fa fa-newspaper-o u-mr-xsmall"></i>News Feed
-                        </a>
-                    </li>
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="messanger.html">
-                            <i class="fa fa-comments-o u-mr-xsmall"></i>Messanger
-                        </a>
-                    </li>
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="projects-board.html">
-                            <i class="fa fa-window-restore u-mr-xsmall"></i>Projects Board
-                        </a>
-                    </li>
-                </ul>
-
-                <h4 class="c-sidebar__title">Pages</h4>
-                <ul class="c-sidebar__list">
                     <li class="c-sidebar__item">
                         <a class="c-sidebar__link" href="user-profile.html">
-                            <i class="fa fa-street-view u-mr-xsmall"></i>User Profile 
+                            <i class="fa fa-street-view u-mr-xsmall"></i>Manage Users 
                         </a>
                     </li>
-
                     <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="candidates.html">
-                            <i class="fa fa-users u-mr-xsmall"></i>Candidates
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="invoices.html">
-                            <i class="fa fa-files-o u-mr-xsmall"></i>Invoices
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="invoice.html">
-                            <i class="fa fa-file-text-o u-mr-xsmall"></i>Single Invoice 
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="browse.html">
-                            <i class="fa fa-list-alt u-mr-xsmall"></i>Browse
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="active-projects.html">
-                            <i class="fa fa-folder u-mr-xsmall"></i>Active Projects
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="project-overview.html">
-                            <i class="fa fa-flag-checkered u-mr-xsmall"></i>Project Overview <span class="c-badge c-badge--success c-badge--xsmall u-ml-xsmall">New</span>
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="chat-dialogue.html">
-                            <i class="fa fa-comment-o u-mr-xsmall"></i>Chat Dialogue <span class="c-badge c-badge--success c-badge--xsmall u-ml-xsmall">New</span>
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="events.html">
-                            <i class="fa fa-clock-o u-mr-xsmall"></i>Events
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="ios-apps-list.html">
-                            <i class="fa fa-apple u-mr-xsmall"></i>iOS Apps List
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="plans.html">
-                            <i class="fa fa-bullhorn u-mr-xsmall"></i>Pricing
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="under-maintenance.html">
-                            <i class="fa fa-cogs u-mr-xsmall"></i>Under Maintenance 
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="404.html">
-                            <i class="fa fa-chain-broken u-mr-xsmall"></i>404 Page
-                        </a>
-                    </li>
-
-
-                    <li class="c-sidebar__item has-submenu">
-                        <a class="c-sidebar__link" data-toggle="collapse" href="#sidebar-submenu" aria-expanded="false" aria-controls="sidebar-submenu">
-                            <i class="fa fa-caret-square-o-down u-mr-xsmall"></i>Sub Menu
-                        </a>
-                        <ul class="c-sidebar__submenu collapse" id="sidebar-submenu">
-                            <li><a class="c-sidebar__link" href="#">Submenu link</a></li>
-                            <li><a class="c-sidebar__link" href="#">Submenu link</a></li>
-                            <li><a class="c-sidebar__link" href="#">Submenu link</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <h4 class="c-sidebar__title">Account</h4>
-                <ul class="c-sidebar__list">
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="account-details.html">
-                            <i class="fa fa-user-circle u-mr-xsmall"></i>Account Details
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="account-settings.html">
-                            <i class="fa fa-cog u-mr-xsmall"></i>Account Settings
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="register.html">
-                            <i class="fa fa-user-plus u-mr-xsmall"></i>Register
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="forgot-password.html">
-                            <i class="fa fa-lock u-mr-xsmall"></i>Forgot Password
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="reset-password.html">
-                            <i class="fa fa-refresh u-mr-xsmall"></i>Reset Password
-                        </a>
-                    </li>
-
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" href="login.html">
-                            <i class="fa fa-sign-in u-mr-xsmall"></i>Login
+                        <a class="c-sidebar__link" href="../server/logout.php">
+                            <i class="fa fa-sign-in u-mr-xsmall"></i>Logout
                         </a>
                     </li>
                 </ul>
 
-                <h4 class="c-sidebar__title">Dashboard UI Kit</h4>
-                <ul class="c-sidebar__list">
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="ui-overview.html">
-                            <i class="fa fa-mouse-pointer u-mr-xsmall"></i>UI Overview <span class="c-badge c-badge--info c-badge--xsmall u-ml-xsmall">Updated</span>
-                        </a>
-                    </li>
 
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="../../external.html?link=https://zawiastudio.com/dashboard/docs">
-                            <i class="fa fa-file-text-o u-mr-xsmall"></i>Documentation
-                        </a>
-                    </li>
 
-                    <li class="c-sidebar__item">
-                        <a class="c-sidebar__link" target="_blank" href="../../external.html?link=https://zawiastudio.com/dashboard/changelog">
-                            <i class="fa fa-tag u-mr-xsmall"></i>Changelog
-                        </a>
-                    </li>
-                </ul>
 
             </div><!-- // .c-sidebar -->
         </div><!-- // .o-page__sidebar -->
@@ -342,6 +184,7 @@
                                 <p class="u-text-mute">You have recieved a mention on twitter, check it out!</p>
                             </div>
                         </a>
+                        
                         <a href="#" class="c-dropdown__item dropdown-item o-media">
                             <span class="o-media__img u-mr-xsmall">
                                 <span class="c-avatar c-avatar--xsmall">
@@ -361,7 +204,8 @@
 
                 <div class="c-dropdown dropdown">
                     <a  class="c-avatar c-avatar--xsmall has-dropdown dropdown-toggle" href="#" id="dropdwonMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="c-avatar__img" src="img/avatar-72.jpg" alt="User's Profile Picture">
+                       <p class="text"><?php echo $username ?></p>
+            
                     </a>
 
                     <div class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdwonMenuAvatar">
@@ -377,10 +221,10 @@
                     <div class="col-xl-4">
                         <div class="c-graph-card" data-mh="graph-cards">
                             <div class="c-graph-card__content">
-                                <h3 class="c-graph-card__title">Next Payout</h3>
-                                <p class="c-graph-card__date">Activity from 4 Jan 2017 to 10 Jan 2017</p>
-                                <h4 class="c-graph-card__number">$2,190</h4>
-                                <p class="c-graph-card__status">You’ve made $230 Today</p>
+                                <h3 class="c-graph-card__title">Stories</h3>
+                                <p class="c-graph-card__date">Activity from 4 Jan 2020</p>
+                                <h4 class="c-graph-card__number">2,000</h4>
+                                <p class="c-graph-card__status">You’ve posted 2,000 until Today</p>
                             </div>
                             
                             <div class="c-graph-card__chart">
@@ -392,10 +236,25 @@
                     <div class="col-xl-4">
                         <div class="c-graph-card" data-mh="graph-cards">
                             <div class="c-graph-card__content">
-                                <h3 class="c-graph-card__title">Total Earnings</h3>
-                                <p class="c-graph-card__date">In 15 Months</p>
-                                <h4 class="c-graph-card__number">$23,580</h4>
-                                <p class="c-graph-card__status">Last Month you’ve made $2,980</p>
+                                <h3 class="c-graph-card__title">Categories</h3>
+                                <p class="c-graph-card__date">Activity from 4 Jan 2020</p>
+                                <h4 class="c-graph-card__number">4 Categories</h4>
+                                <p class="c-graph-card__status">You’ve 4 categories until Today</p>
+                            </div>
+                            
+                            <div class="c-graph-card__chart">
+                                <canvas id="js-chart-earnings" width="300" height="74"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-4">
+                        <div class="c-graph-card" data-mh="graph-cards">
+                            <div class="c-graph-card__content">
+                                <h3 class="c-graph-card__title">Authors</h3>
+                                <p class="c-graph-card__date">Activity from 4 Jan 2020</p>
+                                <h4 class="c-graph-card__number">6 Authors</h4>
+                                <p class="c-graph-card__status">You’ve 6 Authors until Today</p>
                             </div>
                             
                             <div class="c-graph-card__chart">
@@ -404,79 +263,6 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
-                        <div class="c-progress-card" data-mh="graph-cards">
-                            <h3 class="c-progress-card__title">All Tasks Overview</h3>
-                            <p class="c-progress-card__date">Next 4 Weeks</p>
-
-                            <div class="c-progress-card__item">
-                                <div class="c-progress-card__label">Week 3</div>
-
-                                <div class="c-progress-card__progress c-progress c-progress--small">
-                                    <div class="c-progress__bar u-bg-success" style="width:100%;">
-                                        <div class="c-progress__bar u-bg-fancy" style="width: 70%">
-                                            <div class="c-progress__bar u-bg-info" style="width: 50%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- // .c-progress-card__item -->
-
-                            <div class="c-progress-card__item">
-                                <div class="c-progress-card__label">Week 4</div>
-
-                                <div class="c-progress-card__progress c-progress c-progress--small">
-                                    <div class="c-progress__bar u-bg-success" style="width:100%;">
-                                        <div class="c-progress__bar u-bg-fancy" style="width: 70%">
-                                            <div class="c-progress__bar u-bg-info" style="width: 50%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- // .c-progress-card__item -->
-
-                            <div class="c-progress-card__item">
-                                <div class="c-progress-card__label">Week 5</div>
-
-                                <div class="c-progress-card__progress c-progress c-progress--small">
-                                    <div class="c-progress__bar u-bg-success" style="width:100%;">
-                                        <div class="c-progress__bar u-bg-fancy" style="width: 70%">
-                                            <div class="c-progress__bar u-bg-info" style="width: 50%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- // .c-progress-card__item -->
-
-                            <div class="c-progress-card__item">
-                                <div class="c-progress-card__label">Week 6</div>
-
-                                <div class="c-progress-card__progress c-progress c-progress--small">
-                                    <div class="c-progress__bar u-bg-success" style="width:100%;">
-                                        <div class="c-progress__bar u-bg-fancy" style="width: 70%">
-                                            <div class="c-progress__bar u-bg-info" style="width: 50%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- // .c-progress-card__item -->
-                            
-                            <ul class="c-progress-card__legends">
-                                <li class="u-text-mute u-text-xsmall">
-                                    <i class="c-progress-card__legend u-bg-fancy"></i>Progress
-                                </li>
-                                <li class="u-text-mute u-text-xsmall">
-                                    <i class="c-progress-card__legend u-bg-info"></i>Due
-                                </li>
-                                <li class="u-text-mute u-text-xsmall">
-                                    <i class="c-progress-card__legend u-bg-success"></i>OA
-                                </li>
-                                <li class="u-text-mute u-text-xsmall">
-                                    <i class="c-progress-card__legend u-bg-danger"></i>Delegated
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
 
                 <span class="c-divider has-text u-mb-medium">Active Projects</span>
